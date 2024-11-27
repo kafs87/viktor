@@ -1,99 +1,58 @@
-// src/App.js
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [backgroundColor, setBackgroundColor] = useState('#ffffff');
-  const [textColor, setTextColor] = useState('#000000');
-  const [buttonColor, setButtonColor] = useState('#007bff');
+  const [gameName, setGameName] = useState('');
+  const [backgroundColor, setBackgroundColor] = useState('#000000');
+  const [textColor, setTextColor] = useState('#ffffff');
+  const [buttonColor, setButtonColor] = useState('#f4a261');
   const [backgroundImage, setBackgroundImage] = useState(null);
-  const [savedMessage, setSavedMessage] = useState('');
-  const [themes, setThemes] = useState({});
-  const [themeName, setThemeName] = useState('');
 
   useEffect(() => {
     const savedBackgroundColor = localStorage.getItem('backgroundColor');
     const savedTextColor = localStorage.getItem('textColor');
     const savedButtonColor = localStorage.getItem('buttonColor');
     const savedBackgroundImage = localStorage.getItem('backgroundImage');
-    const savedThemes = JSON.parse(localStorage.getItem('themes')) || {};
 
     if (savedBackgroundColor) setBackgroundColor(savedBackgroundColor);
     if (savedTextColor) setTextColor(savedTextColor);
     if (savedButtonColor) setButtonColor(savedButtonColor);
     if (savedBackgroundImage) setBackgroundImage(savedBackgroundImage);
-    setThemes(savedThemes);
   }, []);
 
-  const handleBackgroundColorChange = (event) => {
-    const color = event.target.value;
+  const handleBackgroundColorChange = (color) => {
     setBackgroundColor(color);
     localStorage.setItem('backgroundColor', color);
-    showSavedMessage();
   };
 
-  const handleTextColorChange = (event) => {
-    const color = event.target.value;
+  const handleTextColorChange = (color) => {
     setTextColor(color);
     localStorage.setItem('textColor', color);
-    showSavedMessage();
   };
 
-  const handleButtonColorChange = (event) => {
-    const color = event.target.value;
+  const handleButtonColorChange = (color) => {
     setButtonColor(color);
     localStorage.setItem('buttonColor', color);
-    showSavedMessage();
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (file) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setBackgroundImage(imageUrl);
       localStorage.setItem('backgroundImage', imageUrl);
-      showSavedMessage();
     }
   };
 
-  const saveTheme = () => {
-    if (!themeName) return alert("Por favor, insira um nome para o tema");
-
-    const newThemes = {
-      ...themes,
-      [themeName]: { backgroundColor, textColor, buttonColor, backgroundImage }
-    };
-    setThemes(newThemes);
-    localStorage.setItem('themes', JSON.stringify(newThemes));
-    setThemeName('');
-    showSavedMessage();
-  };
-
-  const loadTheme = (name) => {
-    const theme = themes[name];
-    if (theme) {
-      setBackgroundColor(theme.backgroundColor);
-      setTextColor(theme.textColor);
-      setButtonColor(theme.buttonColor);
-      setBackgroundImage(theme.backgroundImage);
-      showSavedMessage();
-    }
-  };
-
-  const resetColors = () => {
-    setBackgroundColor('#ffffff');
-    setTextColor('#000000');
-    setButtonColor('#007bff');
+  const handleReset = () => {
+    setBackgroundColor('#000000');
+    setTextColor('#ffffff');
+    setButtonColor('#f4a261');
     setBackgroundImage(null);
+
     localStorage.removeItem('backgroundColor');
     localStorage.removeItem('textColor');
     localStorage.removeItem('buttonColor');
     localStorage.removeItem('backgroundImage');
-  };
-
-  const showSavedMessage = () => {
-    setSavedMessage('Configurações salvas!');
-    setTimeout(() => setSavedMessage(''), 2000);
   };
 
   return (
@@ -107,59 +66,78 @@ function App() {
         backgroundPosition: 'center',
       }}
     >
-      <h1>Personalize sua Interface</h1>
+      {/* Imagem do personagem no canto superior esquerdo */}
+      <img
+        src="img/card-ebony.png" // Substitua pela imagem do personagem
+        alt="Personagem"
+        className="character-image-left"
+      />
 
-      <div className="color-controls">
-        <label>
-          Cor de Fundo:
-          <input type="color" value={backgroundColor} onChange={handleBackgroundColorChange} />
-          <span className="color-code">{backgroundColor}</span>
-        </label>
+      {/* Imagem adicional no canto superior esquerdo */}
+      <img
+        src="img/health.png" // Substitua pela imagem adicional
+        alt="Vida e Escudo do Personagem"
+        className="health-image-left"
+      />
 
-        <label>
-          Cor do Texto:
-          <input type="color" value={textColor} onChange={handleTextColorChange} />
-          <span className="color-code">{textColor}</span>
-        </label>
+      {/* Nome do jogo fora da box */}
+      <input
+        className="game-name-input"
+        type="text"
+        placeholder="Digite o nome do jogo..."
+        value={gameName}
+        onChange={(e) => setGameName(e.target.value)}
+      />
 
-        <label>
-          Cor dos Botões:
-          <input type="color" value={buttonColor} onChange={handleButtonColorChange} />
-          <span className="color-code">{buttonColor}</span>
-        </label>
+      {/* Box com os controles */}
+      <div className="game-container">
+        <div className="menu-box">
+          <button style={{ backgroundColor: buttonColor, color: textColor }}>RESUME</button>
+          <button style={{ backgroundColor: buttonColor, color: textColor }}>MENU</button>
+          <button style={{ backgroundColor: buttonColor, color: textColor }}>OPTIONS</button>
+          <button
+            className="reset-button"
+            onClick={handleReset}
+            style={{ backgroundColor: '#e63946', color: '#fff' }}
+          >
+            RESET
+          </button>
+        </div>
 
-        <label>
-          Imagem de Fundo:
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-        </label>
+        {/* Controles de personalização */}
+        <div className="color-controls">
+          <label>
+            Fundo:
+            <input
+              type="color"
+              value={backgroundColor}
+              onChange={(e) => handleBackgroundColorChange(e.target.value)}
+            />
+          </label>
+          <label>
+            Texto:
+            <input
+              type="color"
+              value={textColor}
+              onChange={(e) => handleTextColorChange(e.target.value)}
+            />
+          </label>
+          <label>
+            Botões:
+            <input
+              type="color"
+              value={buttonColor}
+              onChange={(e) => handleButtonColorChange(e.target.value)}
+            />
+          </label>
+          <label>
+            Imagem de Fundo:
+            <input type="file" onChange={(e) => handleImageChange(e.target.files[0])} />
+          </label>
+
+        </div>
       </div>
-
-      <button style={{ backgroundColor: buttonColor, color: textColor }}>Exemplo de Botão</button>
-
-      <div className="actions">
-        <button className="reset-button" onClick={resetColors}>Redefinir para Padrão</button>
-      </div>
-
-      <div className="theme-controls">
-        <input
-          type="text"
-          placeholder="Nome do Tema"
-          value={themeName}
-          onChange={(e) => setThemeName(e.target.value)}
-        />
-        <button onClick={saveTheme}>Salvar Tema</button>
-
-        <select onChange={(e) => loadTheme(e.target.value)}>
-          <option>Escolha um Tema</option>
-          {Object.keys(themes).map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {savedMessage && <div className="saved-message">{savedMessage}</div>}
+      <p>IEA - 3º E.M.</p>
     </div>
   );
 }
