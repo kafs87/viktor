@@ -68,7 +68,7 @@ function App() {
     >
       {/* Imagem do personagem no canto superior esquerdo */}
       <img
-        src="img/card-ebony.png" // Substitua pela imagem do personagem
+        src="img/card-viktor.png" // Substitua pela imagem do personagem
         alt="Personagem"
         className="character-image-left"
       />
