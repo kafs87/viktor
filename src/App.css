@@ -22,18 +22,18 @@ body, html {
   border: none;
   background: transparent;
   outline: none;
-  font-size: 60px; /* Aumentado para destacar ainda mais */
-  font-family: 'Press Start 2P', cursive; /* Fonte pixel art */
-  color: #c4255a;
+  font-size: 35px;
+  font-family: 'Press Start 2P', cursive;
+  color: var(--placeholder-color, #aaa);
   text-align: center;
-  margin-bottom: 30px;
-  width: 80%; /* Aumenta a largura do input */
-  text-transform: uppercase; /* Deixa tudo em letras maiúsculas */
+  width: 80%;
+  text-transform: uppercase;
 }
 
 .game-name-input::placeholder {
-  color: #aaa; /* Placeholder com contraste suave */
+  color: var(--placeholder-color, #aaa); /* Placeholder usa a variável customizada */
 }
+
 
 /* Imagem do personagem (esquerda) */
 .character-image-left {
@@ -47,10 +47,10 @@ body, html {
 /* Vida do personagem (esquerda) */
 .health-image-left {
   position: absolute;
-  top: 1px;
-  left: 140px;
+  top: 60px;
+  left: 100px;
   width: 300px;
-  height: 140px;
+  height: 100px;
 }
 
 /* Box central */
@@ -59,18 +59,22 @@ body, html {
   flex-direction: column;
   align-items: center;
   gap: 30px;
-  background: rgba(0, 0, 0, 0.8);
   padding: 30px;
   border-radius: 10px;
-  border: 2px solid #fff;
 }
 
 /* Menu */
 .menu-box {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  width: 300px; /* Ajuste o tamanho desejado */
+  padding: 15px; /* Reduza o espaçamento interno */
+  margin: 0 auto; /* Centraliza no contêiner */
+  border: 2px solid #fff; /* Borda principal */
+  background-color: rgba(0, 0, 0, 0.8); /* Cor de fundo */
+  display: flex; /* Configura o layout interno */
+  flex-direction: column; /* Garante que os botões fiquem em coluna */
+  gap: 10px; /* Espaçamento entre os botões */
 }
+
 
 button {
   border: 2px solid #fff;
@@ -82,7 +86,7 @@ button {
 }
 
 button:hover {
-  transform: scale(1.1); /* Destaque ao passar o mouse */
+  transform: scale(1.05); /* Destaque ao passar o mouse */
 }
 
 .reset-button {
@@ -97,9 +101,66 @@ button:hover {
   align-items: flex-start;
   gap: 10px;
   color: #fff;
+  cursor: pointer;
+  
 }
 
 input[type='color'] {
   border: none;
   padding: 5px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row; /* Coloca os elementos lado a lado */
+  justify-content: space-between; /* Espaça os controles das laterais */
+  align-items: flex-end; /* Centraliza verticalmente os itens no footer */
+  padding: 20px;
+  color: #fff;
+  font-size: 0.9rem;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.left-controls,
+.right-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Espaçamento entre os itens */
+}
+
+.center-text {
+  position: absolute; /* Centraliza no footer sem interferir nos controles */
+  bottom: 10px; /* Ajusta a altura */
+  left: 50%; /* Posiciona no centro horizontal */
+  transform: translateX(-50%); /* Corrige o deslocamento central */
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+
+.right-controls p {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .game-name-input {
+    font-size: 20px;
+  }
+
+  .menu-box button {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+
+  .game-container {
+    padding: 20px;
+    gap: 20px;
+  }
 }

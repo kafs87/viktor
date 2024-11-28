@@ -7,34 +7,28 @@ function App() {
   const [textColor, setTextColor] = useState('#ffffff');
   const [buttonColor, setButtonColor] = useState('#f4a261');
   const [backgroundImage, setBackgroundImage] = useState(null);
+  const [placeholderColor, setPlaceholderColor] = useState('#ffffff');
 
   useEffect(() => {
     const savedBackgroundColor = localStorage.getItem('backgroundColor');
     const savedTextColor = localStorage.getItem('textColor');
     const savedButtonColor = localStorage.getItem('buttonColor');
     const savedBackgroundImage = localStorage.getItem('backgroundImage');
+    const savedPlaceholderColor = localStorage.getItem('placeholderColor');
 
     if (savedBackgroundColor) setBackgroundColor(savedBackgroundColor);
     if (savedTextColor) setTextColor(savedTextColor);
     if (savedButtonColor) setButtonColor(savedButtonColor);
     if (savedBackgroundImage) setBackgroundImage(savedBackgroundImage);
+    if (savedPlaceholderColor) setPlaceholderColor(savedPlaceholderColor);
   }, []);
 
-  const handleBackgroundColorChange = (color) => {
-    setBackgroundColor(color);
-    localStorage.setItem('backgroundColor', color);
+  const handlePlaceholderColorChange = (color) => {
+    setPlaceholderColor(color);
+    localStorage.setItem('placeholderColor', color);
   };
 
-  const handleTextColorChange = (color) => {
-    setTextColor(color);
-    localStorage.setItem('textColor', color);
-  };
-
-  const handleButtonColorChange = (color) => {
-    setButtonColor(color);
-    localStorage.setItem('buttonColor', color);
-  };
-
+  // Função handleImageChange definida para lidar com a mudança de imagem de fundo
   const handleImageChange = (file) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -44,15 +38,20 @@ function App() {
   };
 
   const handleReset = () => {
+    const userConfirmed = window.confirm('Tem certeza de que deseja resetar todas as configurações?');
+  if (!userConfirmed) return;
     setBackgroundColor('#000000');
     setTextColor('#ffffff');
     setButtonColor('#f4a261');
     setBackgroundImage(null);
+    setPlaceholderColor('#ffffff');
+    setGameName(''); 
 
     localStorage.removeItem('backgroundColor');
     localStorage.removeItem('textColor');
     localStorage.removeItem('buttonColor');
     localStorage.removeItem('backgroundImage');
+    localStorage.removeItem('placeholderColor');
   };
 
   return (
@@ -66,30 +65,29 @@ function App() {
         backgroundPosition: 'center',
       }}
     >
-      {/* Imagem do personagem no canto superior esquerdo */}
       <img
-        src="img/card-viktor.png" // Substitua pela imagem do personagem
+        src="img/card-viktor.png"
         alt="Personagem"
         className="character-image-left"
       />
 
-      {/* Imagem adicional no canto superior esquerdo */}
       <img
-        src="img/health.png" // Substitua pela imagem adicional
+        src="img/health.png"
         alt="Vida e Escudo do Personagem"
         className="health-image-left"
       />
 
-      {/* Nome do jogo fora da box */}
       <input
         className="game-name-input"
         type="text"
         placeholder="Digite o nome do jogo..."
         value={gameName}
         onChange={(e) => setGameName(e.target.value)}
+        style={{
+          '--placeholder-color': placeholderColor, // Passa a cor para o CSS via variável
+        }}
       />
 
-      {/* Box com os controles */}
       <div className="game-container">
         <div className="menu-box">
           <button style={{ backgroundColor: buttonColor, color: textColor }}>RESUME</button>
@@ -103,15 +101,16 @@ function App() {
             RESET
           </button>
         </div>
+      </div>
 
-        {/* Controles de personalização */}
-        <div className="color-controls">
+      <div className="footer">
+        <div className="left-controls">
           <label>
             Fundo:
             <input
               type="color"
               value={backgroundColor}
-              onChange={(e) => handleBackgroundColorChange(e.target.value)}
+              onChange={(e) => setBackgroundColor(e.target.value)}
             />
           </label>
           <label>
@@ -119,7 +118,7 @@ function App() {
             <input
               type="color"
               value={textColor}
-              onChange={(e) => handleTextColorChange(e.target.value)}
+              onChange={(e) => setTextColor(e.target.value)}
             />
           </label>
           <label>
@@ -127,17 +126,30 @@ function App() {
             <input
               type="color"
               value={buttonColor}
-              onChange={(e) => handleButtonColorChange(e.target.value)}
+              onChange={(e) => setButtonColor(e.target.value)}
             />
           </label>
           <label>
-            Imagem de Fundo:
+            Título:
+            <input
+              type="color"
+              value={placeholderColor}
+              onChange={(e) => handlePlaceholderColorChange(e.target.value)}
+            />
+          </label>
+        </div>
+
+        <div className="center-text">
+          <p>IEA - 3º E.M.</p>
+        </div>
+
+        <div className="right-controls">
+          <label className="bglabel">
+            <p>Imagem de Fundo:</p>
             <input type="file" onChange={(e) => handleImageChange(e.target.files[0])} />
           </label>
-
         </div>
       </div>
-      <p>IEA - 3º E.M.</p>
     </div>
   );
 }
